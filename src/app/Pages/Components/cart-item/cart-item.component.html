@@ -1,0 +1,63 @@
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Shopping Cart</h1>
+  
+    <!-- Cart Table -->
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of cartItems; track $index) {
+            <tr>
+              <td>{{ item.productName }}</td>
+              <td>${{ item.productPrice }}</td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <button
+                    pButton
+                    icon="pi pi-minus"
+                    class="p-button-rounded p-button-text"
+                    (click)="decrementQuantity(item)"
+                  ></button>
+                  <span class="mx-2">{{ item.quantity }}</span>
+                  <button
+                    pButton
+                    icon="pi pi-plus"
+                    class="p-button-rounded p-button-text"
+                    (click)="incrementQuantity(item)"
+                  ></button>
+                </div>
+              </td>
+              <td>${{ item.productPrice * item.quantity }}</td>
+              <td>
+                <button
+                  pButton
+                  icon="pi pi-trash"
+                  class="p-button-danger p-button-rounded"
+                  (click)="removeItem(item.id)"
+                ></button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Total Price -->
+    <div class="text-start mt-4">
+      <h4>Total: ${{ getTotalPrice() }}</h4>
+      <button
+        pButton
+        label="Checkout"
+        class="p-button-success"
+        (click)="checkout()"
+      ></button>
+    </div>
+  </div>

@@ -1,0 +1,162 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card p-4 shadow-lg border border-primary rounded w-75" style="max-width: 1200px; ">
+    <h2 class="text-center mb-4">Register</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+            <!-- First  Name -->
+            <div class="mb-3 col-md-6">
+              <label for="firstname" class="form-label">first Name</label>
+              <input
+                id="firstname"
+                type="text"
+                formControlName="firstname"
+                pInputText
+                class="form-control"
+                placeholder="Enter your first name"
+              />
+              <small
+                *ngIf="
+                  registerForm.get('firstname')?.invalid &&
+                  registerForm.get('firstname')?.touched
+                "
+                class="text-danger"
+              >
+               First Name is required.
+              </small>
+            </div>
+            <!-- last name -->
+            <div class="mb-3 col-md-6">
+              <label for="lastname" class="form-label">last Name</label>
+              <input
+                id="lastname"
+                type="text"
+                formControlName="lastname"
+                pInputText
+                class="form-control"
+                placeholder="Enter your name"
+              />
+              <small
+                *ngIf="
+                  registerForm.get('lastname')?.invalid &&
+                  registerForm.get('lastname')?.touched
+                "
+                class="text-danger"
+              >
+              last Name is required.
+              </small>
+            </div>
+
+        </div>
+
+    <div class="row">     
+        <!-- Email -->
+        <div class="mb-3 col-md-6">
+        <label for="email" class="form-label">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          pInputText
+          class="form-control"
+          placeholder="Enter your email"
+        />
+     
+        <small
+          *ngIf="
+            registerForm.get('email')?.invalid &&
+            registerForm.get('email')?.touched
+          "
+          class="text-danger"
+        >
+          A valid email is required.
+        </small>
+           </div>
+
+         <!-- phoneNumber  -->
+         <div class="mb-3 col-md-6">
+            <label for="phoneNumber" class="form-label">phone Number</label>
+            <input
+              id="phoneNumber"
+              type="text"
+              formControlName="phoneNumber"
+              pInputText
+              class="form-control"
+              placeholder="Enter your phoneNumber"
+            />
+            <small
+              *ngIf="
+                registerForm.get('phoneNumber')?.invalid &&
+                registerForm.get('phoneNumber')?.touched
+              "
+              class="text-danger"
+            >
+              A valid phoneNumber is required.
+            </small>
+          </div>
+      </div>
+      
+    <div class="row">   
+      <!-- Password -->
+      <div class="mb-3 col-md-6">
+        <label for="password" class="form-label">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          pInputText
+          class="form-control"
+          placeholder="Enter your password"
+        />
+        <small
+          *ngIf="
+            registerForm.get('password')?.invalid &&
+            registerForm.get('password')?.touched
+          "
+          class="text-danger"
+        >
+          Password is required (minimum 6 characters).
+        </small>
+      </div>
+ <!-- Gender  -->
+ <div class="mb-3 col-md-6">
+    <label for="gender" class="form-label">Gender</label>
+    <p-dropdown
+      [options]="genders"
+      formControlName="gender"
+      placeholder="Select Gender"
+      optionLabel="name"
+      optionValue="value"
+      [style]="{ width: '100%' }"
+    ></p-dropdown>
+    <small
+      *ngIf="registerForm.get('gender')?.invalid && registerForm.get('gender')?.touched"
+      class="text-danger"
+    >
+      A valid gender is required.
+    </small>
+  </div>
+  
+
+
+    </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        pButton
+        label="Register"
+        class="btn btn-primary w-100 mt-3"
+        [disabled]="registerForm.invalid"
+      ></button>
+    </form>
+
+    <button
+        type="button"
+        pButton
+        label="login"
+        class="btn btn-info w-100 mt-3"
+       (click)="onlogin()"
+      ></button>
+
+  </div>
+</div>

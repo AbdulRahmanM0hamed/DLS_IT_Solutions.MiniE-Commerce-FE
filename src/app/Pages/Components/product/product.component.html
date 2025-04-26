@@ -1,0 +1,230 @@
+<div class="container mt-5">
+  <!-- Add Product Button -->
+
+ <div class="ms-auto mb-4" style="width: max-content;">
+  <button
+    pButton
+    label="logout"
+    class="p-button-danger"
+    (click)="logout()"
+  ></button>
+</div>
+@if(role == 'Admin'){
+  <div class="ms-auto mb-4" style="width: max-content;">
+    <button
+      pButton
+      label="Add New Product"
+      class="p-button-success"
+      (click)="openAddProductDialog()"
+    ></button>
+  </div>
+}
+  <!-- Category Filter -->
+  <div class="w-50 ms-auto mb-4" style="min-width: 200px;">
+    <p-dropdown
+      [options]="categories"
+      [(ngModel)]="selectedCategory"
+      placeholder="Select a Category"
+      class="w-100"
+    ></p-dropdown>
+  </div>
+
+  <!-- Products Grid -->
+  <div class="row">
+    <h1 class="text-center py-2 mb-4">Our Products</h1>
+
+    @for (product of getFilteredProducts(); track $index) {
+    <div class="col-md-4 mb-4">
+      <p-card
+        [header]="product.name"
+        [subheader]="'$' + product.price"
+        class="h-100 shadow-sm"
+      >
+      @if(role == 'Admin'){ 
+      <ng-template pTemplate="header">
+          <div
+            class="d-flex justify-content-between align-items-center mb-2 px-4"
+          >
+            <button
+              pButton
+              icon="pi pi-trash"
+              class="p-button-danger p-button-rounded"
+              (click)="deleteProduct(product)"
+            ></button>
+            <button
+              pButton
+              icon="pi pi-pencil"
+              class="p-button-primary p-button-rounded"
+              (click)="updateProduct(product)"
+            ></button>
+          </div>
+        </ng-template>
+      }
+        <ng-template pTemplate="content">
+          <p><strong>Description:</strong> {{ product.description }}</p>
+          <p><strong>Stock:</strong> {{ product.stock }}</p>
+          <p><strong>Category:</strong> {{ product.categoryName }}</p>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <button
+            pButton
+            label="Add to Cart"
+            (click)="addProductToCart(product)"
+            class="p-button-success w-100"
+          ></button>
+        </ng-template>
+      </p-card>
+    </div>
+    }
+  </div>
+
+  <!-- Add Product Dialog -->
+  <p-dialog
+    header="Add New Product"
+    [(visible)]="displayAddProductDialog"
+    [modal]="true"
+    [closable]="true"
+    [style]="{ width: '400px' }"
+  >
+    <form
+      [formGroup]="productForm"
+      (ngSubmit)="currentSubmit == 'add' ? addProduct() : saveUpdate()"
+    >
+      <!-- Product Name -->
+      <div class="p-field mb-3">
+        <label for="name" class="form-label">Product Name</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          pInputText
+          class="form-control"
+          placeholder="Enter product name"
+        />
+        @if (productForm.get('name')?.invalid &&
+        productForm.get('name')?.touched) {
+        <small class="text-danger">Product name is required.</small>
+        }
+      </div>
+
+      <!-- Description -->
+      <div class="p-field mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          id="description"
+          formControlName="description"
+          pInputTextarea
+          class="form-control"
+          placeholder="Enter product description"
+        ></textarea>
+        @if (productForm.get('description')?.invalid &&
+        productForm.get('description')?.touched) {
+        <small class="text-danger">Description is required.</small>
+        }
+      </div>
+
+      <!-- Price -->
+      <div class="p-field mb-3">
+        <label for="price" class="form-label">Price</label>
+        <input
+          id="price"
+          type="number"
+          formControlName="price"
+          pInputText
+          class="form-control"
+          placeholder="Enter price"
+        />
+        @if (productForm.get('price')?.invalid &&
+        productForm.get('price')?.touched) {
+        <small class="text-danger">Price must be greater than 0.</small>
+        }
+      </div>
+
+      <!-- Stock -->
+      <div class="p-field mb-3">
+        <label for="stock" class="form-label">Stock</label>
+        <input
+          id="stock"
+          type="number"
+          formControlName="stock"
+          pInputText
+          class="form-control"
+          placeholder="Enter stock quantity"
+        />
+        @if (productForm.get('stock')?.invalid &&
+        productForm.get('stock')?.touched) {
+        <small class="text-danger">Stock must be greater than 0.</small>
+        }
+      </div>
+
+      <!-- Category -->
+
+      <div class="p-field mb-3">
+        <label for="categoryId" class="form-label">Category</label>
+        <p-dropdown
+          id="categoryId"
+          formControlName="categoryId"
+          [options]="categoriesD"
+          placeholder="Select a category"
+          optionLabel="label"
+          optionValue="value"
+          class="form-control"
+        >
+        </p-dropdown>
+        @if (productForm.get('categoryId')?.invalid &&
+        productForm.get('categoryId')?.touched) {
+        <small class="text-danger">Category is required.</small>
+        }
+      </div>
+
+      <!-- <div class="p-field mb-3">
+        <label for="categoryName" class="form-label">Category</label>
+        <input
+          id="categoryName"
+          type="text"
+          formControlName="categoryName"
+          pInputText
+          class="form-control"
+          placeholder="Enter category name"
+        />
+        @if (productForm.get('categoryName')?.invalid && productForm.get('categoryName')?.touched) {
+          <small class="text-danger">Category is required.</small>
+        }
+      </div> -->
+
+      <!-- Submit Button -->
+      <div class="d-flex justify-content-end">
+        @if(currentSubmit == 'update'){
+        <button
+          type="submit"
+          pButton
+          label="Update Product"
+          class="p-button-success"
+          [disabled]="productForm.invalid"
+        ></button>
+        }@else {
+        <button
+          type="submit"
+          pButton
+          label="Add Product"
+          class="p-button-success"
+          [disabled]="productForm.invalid"
+        ></button>
+        }
+      </div>
+    </form>
+  </p-dialog>
+</div>
+
+<!-- Cart Item Component -->
+<div class="cart-icon" (click)="showCart()">
+  <i class="pi pi-shopping-cart" style="font-size: 2rem"></i>
+  <!-- <span class="cart-badge">0</span> -->
+</div>
+
+<div class="cart-container p-3" [ngClass]="{ 'd-none': !isCratShowen }">
+  <div class="close-icon" (click)="hideCart()">
+    <i class="pi pi-times"></i>
+  </div>
+  <app-cart-item [ProductId]="productId"></app-cart-item>
+</div>
