@@ -102,6 +102,7 @@ export class ProductComponent implements OnInit {
   openAddProductDialog() {
     this.displayAddProductDialog = true;
     this.productForm.reset();
+    this.currentSubmit = 'add';
   }
 
   addProduct() {
@@ -123,11 +124,13 @@ export class ProductComponent implements OnInit {
         .subscribe({
           next: (response) => {
             console.log('Product added successfully', response);
+
           },
           error: (error) => {
             console.error('Error adding product', error);
           },
         });
+        this.loadProducts();
       this.loadCategories();
       this.displayAddProductDialog = false;
     } else {
